@@ -48,10 +48,10 @@ def print_help():
 
 def main():
     argc = len(sys.argv)
-    if argc == 3 and sys.argv[1] == 'commits':
-        save_contributors_commits(sys.argv[1], sys.argv[2])
-    elif argc == 4 and sys.argv[1] == 'files':
-        save_contributors_files(load_contributors_commits(sys.argv[1]), sys.argv[2], sys.argv[3])
+    if argc == 4 and sys.argv[1] == 'commits':
+        save_contributors_commits(sys.argv[2], sys.argv[3])
+    elif argc == 5 and sys.argv[1] == 'files':
+        save_contributors_files(load_contributors_commits(sys.argv[2]), sys.argv[3], sys.argv[4])
     else:
         print_help()
 
