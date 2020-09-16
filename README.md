@@ -8,7 +8,14 @@ Lengths of the edges reflect relative amount of files modified by both users on 
 
 ## Installing dependencies
 
-Python3 and pip3 are required to run this project. Use pip to install essential python packages:
+Python3, python3-pip and python3-tk are required to run this project.
+You also need git to clone the react repo.
+Use apt install To install all requirements:
+```
+sudo apt install python3 python3-pip python3-tk git
+```
+
+Use pip to install essential python packages:
 ```
 pip3 install -r requirements.txt
 ```
