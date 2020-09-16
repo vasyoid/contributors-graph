@@ -1,12 +1,12 @@
 import sys
 
-from collect import load_contributors_stats
+from collect import load_contributors_files
 from graph import Graph
 from frame import run_frame
 
 
 def main():
-    contributors = load_contributors_stats(sys.argv[1])
+    contributors = load_contributors_files(sys.argv[1])
     graph = Graph()
 
     for contributor in contributors:
