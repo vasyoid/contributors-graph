@@ -8,7 +8,7 @@ Lengths of the edges reflect relative amount of files modified by both users on 
 
 ## Installing dependencies
 
-Python3 and pip3 are required to run this project. Use pip to install essential python packages:
+Python3 and python3-pip are required to run this project. Use pip to install essential python packages:
 ```
 pip3 install -r requirements.txt
 ```
