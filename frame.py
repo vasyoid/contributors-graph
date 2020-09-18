@@ -54,34 +54,46 @@ def to_screen(a):
     return (a[0] - 0.5) * zoom_factor + x_offset, (a[1] - 0.5) * zoom_factor + y_offset
 
 
-def draw_graph(frame, pt):
+def init_canvas(frame):
+    for k, weight in frame.graph.edges.items():
+        if weight > 0:
+            frame.graph.edges_ids[k] = frame.canvas.create_line(-1, -1, -1, -1, fill='#999999')
+
+    for k, v in frame.graph.vertices.items():
+        frame.graph.vertices_ids[k] = frame.canvas.create_oval(0, 0, 0, 0, fill='#aaffaa')
+        frame.graph.labels_ids[k] = frame.canvas.create_text(0, 0, text=k, anchor=S)
+
+    text_id = frame.canvas.create_text(0, FRAME_SIZE, text=f'connection threshold: {threshold:.2f}', anchor=SW, font='Noto 20')
+    draw_graph(frame, time(), text_id)
+
+
+def draw_graph(frame, pt, text_id):
 
     ct = time()
     dt = ct - pt
 
-    for i in range(40):
-        frame.graph.update(dt, threshold)
-
-    frame.canvas.delete('all')
+    frame.graph.update(dt, threshold)
 
     for (u, v), weight in frame.graph.edges.items():
         if weight > threshold:
-            u = to_screen(frame.graph.vertices[u])
-            v = to_screen(frame.graph.vertices[v])
-            frame.canvas.create_line(u[0], u[1], v[0], v[1], fill='#999999')
+            pu = to_screen(frame.graph.vertices[u])
+            pv = to_screen(frame.graph.vertices[v])
+            frame.canvas.coords(frame.graph.edges_ids[u, v], pu[0], pu[1], pv[0], pv[1])
+        elif (u, v) in frame.graph.edges_ids:
+            frame.canvas.coords(frame.graph.edges_ids[u, v], -1, -1, -1, -1)
 
     for k, v in frame.graph.vertices.items():
-        v = to_screen(v)
-        frame.canvas.create_oval(v[0] - VERTEX_R, v[1] - VERTEX_R, v[0] + VERTEX_R, v[1] + VERTEX_R, fill='#aaffaa')
-        frame.canvas.create_text(v[0], v[1] - VERTEX_R, text=k, anchor=S)
+        pv = to_screen(v)
+        frame.canvas.coords(frame.graph.vertices_ids[k], pv[0] - VERTEX_R, pv[1] - VERTEX_R, pv[0] + VERTEX_R, pv[1] + VERTEX_R)
+        frame.canvas.coords(frame.graph.labels_ids[k], pv[0], pv[1] - VERTEX_R)
 
-    frame.canvas.create_text(0, FRAME_SIZE, text=f'connection threshold: {threshold:.2f}', anchor=SW, font='Noto 20')
-    frame.after(40, draw_graph, frame, ct)
+    frame.canvas.itemconfig(text_id, text=f'connection threshold: {threshold:.2f}')
+    frame.after(100, draw_graph, frame, ct, text_id)
 
 
 def run_frame(graph):
     root = Tk()
     frame = GraphFrame(graph)
     root.geometry(f'{FRAME_SIZE}x{FRAME_SIZE}')
-    draw_graph(frame, time())
+    init_canvas(frame)
     root.mainloop()

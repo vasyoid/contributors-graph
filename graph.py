@@ -7,6 +7,9 @@ class Graph:
         self.vertices = {}
         self.edges = {}
         self.forces = {}
+        self.vertices_ids = {}
+        self.labels_ids = {}
+        self.edges_ids = {}
 
     def add_vertex(self, vertex):
         self.vertices[vertex] = (random(), random())
@@ -28,7 +31,7 @@ class Graph:
             expected = (1 - weight) * 3 + 1 if weight > threshold else 5
             actual = length(uv)
             delta = actual - expected
-            k = 0.1 if weight > threshold else 0.1
+            k = 0.3
             if weight <= threshold and delta > 0:
                 continue
             uv = mul(uv, k / actual * delta)
